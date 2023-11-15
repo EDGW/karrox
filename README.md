@@ -1,4 +1,4 @@
-## the Developing Environment
+## the Development Environment
 ### Environment
 To make sure the following programs are installed on your computer
  - bochs
