@@ -67,6 +67,15 @@ namespace boot{
             str++;                  //move to next
         }
     }
+    char radixnum[] = {'0','1','2','3','4','5','6','7','8','9',
+                        'A','B','C','D','E','F','G',
+                        'H','I','J','K','L','M','N',
+                        'O','P','Q','R','S','T',
+                        'U','V','W','X','Y','Z',
+                        'a','b','c','d','e','f',
+                        'g','h','i','j','k','l','m','n',
+                        'o','p','q','r','s','t',
+                        'u','v','w','x','y','z'};
     extern "C" void printf(const char* format...){
         va_list ls;
         va_start(ls,format);
@@ -76,6 +85,22 @@ namespace boot{
                 str++;
                 if(*str=='s'){      //'%s' is replaced by a string
                     putstr(va_arg(ls,const char*));
+                    str++;
+                }
+                else if(*str=='d'){      //'%s' is replaced by a string
+                    putint((int32_t)va_arg(ls,int32_t));
+                    str++;
+                }
+                else if(*str=='o'){      //'%s' is replaced by a string
+                    putinto((int32_t)va_arg(ls,int32_t));
+                    str++;
+                }
+                else if(*str=='b'){      //'%s' is replaced by a string
+                    putintb((int32_t)va_arg(ls,int32_t));
+                    str++;
+                }
+                else if(*str=='x' || *str=='X'){      //'%s' is replaced by a string
+                    putinth((int32_t)va_arg(ls,int32_t));
                     str++;
                 }
                 else if(*str==STRING_END){ // '%' at the end of a string

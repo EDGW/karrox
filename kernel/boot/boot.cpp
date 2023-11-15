@@ -4,13 +4,13 @@
 namespace boot{
     void printinfo(){
         printf("booting from %s\n",arch::getbootinfo());
-        printf("karrox kernel started");
+        printf("karrox kernel started from %x\n",printinfo);
     }
     /*  kernel starts from here     */
     void main(){
         init_printer();
         printinfo();
-        while(1){
-        }
+        arch::init();
+        while(1);
     }
 }
