@@ -18,10 +18,10 @@ The descriptions of Project
     compile and link all sources and generate an image file
 
  -  **`make run`**        
-    run 'make all' and start bochs emulator
+    run `make all` and start bochs emulator
 
  -  **`make mount`**      
-    mount the iso file(readonly) to the 'mountediso' folder under the project path
+    mount the iso file(readonly) to the `mountediso` folder under the project path
 
  -  **`make umount`**
     umount the iso file
