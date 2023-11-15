@@ -1,0 +1,4 @@
+/mountediso
+/run
+*/.obj/*
+*.o
