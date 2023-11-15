@@ -1,0 +1,7 @@
+F   UID     PID    PPID PRI  NI    VSZ   RSS WCHAN  STAT TTY        TIME COMMAND
+4     0     970     938  20   0 4344724 100868 -    Ssl+ tty7       0:00 /usr/lib/xorg/Xorg -nolisten tcp -auth /var/run/sddm/{92fe7d46-b42f-43e5-8749-712c3ca3cc60} -background none -noreset -displayfd 17 -seat seat0 vt7
+4  1000    1335    1292  20   0 199320 41764 do_sys Ssl+ tty1       0:00 /usr/bin/startplasma-wayland
+0  1000  219621  216055  20   0   8616  5428 do_sel Ss+  pts/1      0:00 /usr/bin/bash --init-file /usr/share/code/resources/app/out/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh
+0  1000  220941  216055  20   0   8616  5360 do_wai Ss   pts/2      0:00 /usr/bin/bash --init-file /usr/share/code/resources/app/out/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh
+0  1000  224942  216055  20   0   8616  5260 do_sel Ss+  pts/3      0:00 /usr/bin/bash --init-file /usr/share/code/resources/app/out/vs/workbench/contrib/terminal/browser/media/shellIntegration-bash.sh
+4  1000  225500  220941  20   0  11600  4832 -      R+   pts/2      0:00 ps all
