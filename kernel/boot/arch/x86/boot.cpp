@@ -3,51 +3,120 @@
 #include "arch.h"
 #include <stdint.h>
 #include "memory.h"
-namespace arch_x86{
+namespace arch_x86
+{
     /*  create a global descriptor table entry
     base:           32bit-addr
     limit:          20bit-limit in granularity
     flags/access:   gdt properties
     */
-    uint64_t create_gdt_entry(uint64_t base,uint64_t limit,uint64_t flags,uint64_t access){
+    uint64_t create_gdt_entry(uint64_t base, uint64_t limit, uint64_t flags, uint64_t access)
+    {
         uint64_t entry = flags | access;
-        entry |= ((base&0xffffu)<<16);/*16-31 stores the 0-15 bits of the base */
-        entry |= ((base&0xff0000u)<<(32-16));/*32-39 stores the 16-23 bits of the base*/
-        entry |= ((base&0xff000000u)<<(56-24));/*56-63 stores the 24-31 bits of the base*/
+        entry |= ((base & 0xffffu) << 16);            /*16-31 stores the 0-15 bits of the base */
+        entry |= ((base & 0xff0000u) << (32 - 16));   /*32-39 stores the 16-23 bits of the base*/
+        entry |= ((base & 0xff000000u) << (56 - 24)); /*56-63 stores the 24-31 bits of the base*/
 
-        entry |= ((limit&0xffffu));
-        entry |= ((limit&0xf0000u)<<(48-16));
+        entry |= ((limit & 0xffffu));
+        entry |= ((limit & 0xf0000u) << (48 - 16));
         return entry;
     }
-    void init_gdt(){
+    void init_gdt()
+    {
         boot::putstr("initializing global descriptor table.\n");
         uint64_t gdtr = 0;
-        asm volatile("sgdt %0"::"m"(gdtr):);
-        uint32_t offset = (uint32_t)(gdtr>>16); //GDTR REG: 48-16 offset;  15-0 limit
-        uint64_t* table = (uint64_t*)offset;
-        *(table+0)=create_gdt_entry(0,0xfffffu,DEFAULT_FLAG,ACCESS_CODE | ACCESS_USER);//0x0 user code
-        *(table+1)=create_gdt_entry(0,0xfffffu,DEFAULT_FLAG,ACCESS_DATA | ACCESS_USER);//0x8 user data
-        *(table+2)=create_gdt_entry(0,0xfffffu,DEFAULT_FLAG,ACCESS_CODE | ACCESS_KERNEL);//0x10 kernel code
-        *(table+3)=create_gdt_entry(0,0xfffffu,DEFAULT_FLAG,ACCESS_DATA | ACCESS_KERNEL);//0x18 kernel data
-        asm volatile("lgdt %0"::"m"(gdtr):);
+        asm volatile("sgdt %0" ::"m"(gdtr) :);
+        uint32_t offset = (uint32_t)(gdtr >> 16); // GDTR REG: 48-16 offset;  15-0 limit
+        uint64_t *table = (uint64_t *)offset;
+        *(table + 0) = create_gdt_entry(0, 0xfffffu, DEFAULT_FLAG, ACCESS_CODE | ACCESS_USER);   // 0x0 user code
+        *(table + 1) = create_gdt_entry(0, 0xfffffu, DEFAULT_FLAG, ACCESS_DATA | ACCESS_USER);   // 0x8 user data
+        *(table + 2) = create_gdt_entry(0, 0xfffffu, DEFAULT_FLAG, ACCESS_CODE | ACCESS_KERNEL); // 0x10 kernel code
+        *(table + 3) = create_gdt_entry(0, 0xfffffu, DEFAULT_FLAG, ACCESS_DATA | ACCESS_KERNEL); // 0x18 kernel data
+        asm volatile("lgdt %0" ::"m"(gdtr) :);
     }
-    void init_paging(){
-
+    void clear4k(uint8_t* ptr){
+        for(int i = 0;i<0x1000;i++){
+            *ptr=0;
+            ptr++;
+        }
     }
-    void init_memory(){
+    /*1024:page directory table siz; 4096:4 page tables siz
+    PDE#0->PT#1
+    PDE#1->PT#2
+    PDE#2->PT#3
+    PDE#3->PT#4
+    PDE#4->PT#5
+    PDE#0x300->PT#1
+    PDE#0x301->PT#2
+    PDE#0x302->PT#3
+    PDE#0x303->PT#4
+    PDE#0x304->PT#5
+    PE#1 (0-4MiB)
+    PE#2 (5-8MiB)
+    PE#3 (9-12MiB)
+    PE#4 (13-16MiB)
+    PE#5 (17-20MiB)
+    */
+    pg_table_entry* kernel_page=(pg_table_entry*)0x1000000;//16MB+1
+    /*
+    create a page entry
+    offset: 32bit physical page addr,make sure the low 12 bit is 0
+    flags:  page flags
+    */
+    pg_table_entry create_pg_entry(uint32_t offset,uint32_t flags){
+        offset &= 0xfffff000;
+        offset |= flags;
+        return offset;
+    }
+    void create_pde(){
+        for(int i = 0;i<5;i++){
+            kernel_page[i]=kernel_page[0x300+i]
+            =create_pg_entry((uint32_t)(kernel_page+(0x400*(i+1))),PAGE_FLAG_DEFAULT_USER);
+        }
+    }
+    void create_pte(uint32_t id,uint32_t phyAddr,uint32_t flags){
+        for(uint32_t i = 0;i<1024;i++){
+            kernel_page[(id)*0x400+i]=create_pg_entry(phyAddr+(i*4096),flags);
+        }
+    }
+    void init_paging()
+    {
+        boot::putstr("initializing page table.\n");
+        create_pde();
+        uint32_t pg_addr = 0;
+        for(int i = 1;i<=5;i++,pg_addr+=4096){
+            create_pte(i,pg_addr,PAGE_FLAG_DEFAULT_KERNEL);
+        }
+        asm volatile(
+            "mov %0     ,%%eax\n"
+            "mov %%eax  ,%%cr3\n"
+            "mov %%cr0  ,%%eax\n"
+            "or $0x80000001,%%eax\n"
+            "mov %%eax  ,%%cr0\n"
+            :
+            :"r"(kernel_page)
+            :"%eax"
+        );
+    }
+    void init_memory()
+    {
         init_gdt();
         init_paging();
     }
-    void main(){
+    void main()
+    {
         boot::main();
     }
 }
-const char* arch::getbootinfo(){
-        return "GRUB x86 kernel boot";
+const char *arch::getbootinfo()
+{
+    return "GRUB x86 kernel boot";
 }
-void arch::init(){
+void arch::init()
+{
     arch_x86::init_memory();
 }
-extern "C" void boot_x86_main(void){
+extern "C" void boot_x86_main(void)
+{
     arch_x86::main();
 }
