@@ -23,10 +23,10 @@ The descriptions of Project
  -  **`make run`**        
     run `make all` and start bochs emulator
 
- -  **`make mount`**      
+ -  **`(sudo) make mount`**      
     mount the iso file(readonly) to the `mountediso` folder under the project path
 
- -  **`make umount`**
+ -  **`(sudo) make umount`**
     umount the iso file
 #### Makefile Variables
 - **`$(OBJ_DIR)`**
