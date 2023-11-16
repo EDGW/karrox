@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "memory.h"
 #include "interrupt.h"
+#include "io.h"
 namespace arch_x86
 {
     /*      GDT         */
@@ -39,6 +40,7 @@ namespace arch_x86
 
 
     /*      Paging      */
+    //clear 4Kib memory from ptr
     void clear4k(uint8_t* ptr){
         for(int i = 0;i<0x1000;i++){
             *ptr=0;
@@ -106,7 +108,15 @@ namespace arch_x86
     }
     
     
-    /*      IDT     */
+    /*      IDT     
+        0x00-0x1F Exceptions
+        0x20-0x2f User-defined Interrupts
+    */
+    /*create a intr entry
+    offset  :32-bit handler address
+    selector:handler's segment selector
+    flag    :intr flags
+    */
     intr_desc_entry create_intr_entry(uint32_t offset,uint16_t selector,uint8_t flag){
         intr_desc_entry desc;
         desc.offset_low=(uint16_t)(offset&0xffff);
@@ -126,8 +136,32 @@ namespace arch_x86
         idtr |= sizeof(table)-1;
         asm volatile("lidt %0"::"m"(idtr):);
     }
+    /*      init programmable interrupt controller  (8259A)*/
+    void init_pic(){
+        boot::printf("initializing programmable interrupt controller(8259A)\n");
+        //Init MASTER
+        io_outb(X8259A_MASTER_1_PORT,ICW1_IC4 | ICW1 | ICW1_LTIM_EDGE); //ICW1
+        io_outb(X8259A_MASTER_2_PORT,USER_INTR_ST);         //ICW2 determines that the intr vector starts from 0x20 IR[0-7]->0x20-0x27
+        io_outb(X8259A_MASTER_2_PORT,0b00000100);   //ICW3 determines that the 2nd port connects the slave
+        io_outb(X8259A_MASTER_2_PORT,0b00000001);   //8086 mode, normal EOI (the enf of an intr is handled by handler but hardware)
+        //Init SLAVE
+        io_outb(X8259A_SLAVE_1_PORT,ICW1_IC4 | ICW1 | ICW1_LTIM_EDGE); //ICW1
+        io_outb(X8259A_SLAVE_2_PORT,USER_INTR_ST+8);         //ICW2 determines that the intr vector starts from 0x28 [IR8-15]->0x28-0x2f
+        io_outb(X8259A_SLAVE_2_PORT,0b00000010);   //ICW3 determines that the slave connects to the 2nd port of the master
+        io_outb(X8259A_SLAVE_2_PORT,0b00000001);   //8086 mode, normal EOI (the enf of an intr is handled by handler but hardware)
+        
+        //print the intr table
+        boot::set_printer_color(CLR_GREEN);
+        uint32_t num = USER_INTR_ST;
+        for(int i = 0;i<=15;i+=1,num++){
+            boot::printf("IRQ%d:%x\t",i,num);
+            if((i+1)%4==0)boot::putchar('\n');
+        }
+        boot::reset_printer_color();
+    }
     void init_intr(){
         create_intr_table();
+        init_pic();
     }
     void init_memory()
     {

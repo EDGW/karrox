@@ -8,11 +8,12 @@ namespace boot{
     typedef uint8_t color8b_t;
     #define ON          true
     #define OFF         false
-    #define CLR_RED     (color8b_t)0b100
-    #define CLR_GREEN   (color8b_t)0b010
-    #define CLR_BLUE    (color8b_t)0b001
+    #define CLR_RED     (boot::color8b_t)0b100
+    #define CLR_GREEN   (boot::color8b_t)0b010
+    #define CLR_BLUE    (boot::color8b_t)0b001
     #define CLR_WHITE   (CLR_RED | CLR_GREEN |CLR_BLUE)
 
+    void reset_printer_color();
     void set_printer_color(color8b_t clr);      //set the printer's foreground color
     void set_printer_background(color8b_t clr); //set the printer's background color
     void set_printer_highlight(bool);           //ON/OFF determines whether the characters is highlighted or not

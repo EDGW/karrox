@@ -1,6 +1,7 @@
 #ifndef INTERRUPT_H_
 #define INTERRUPT_H_
 #include<stdint.h>
+#include "interrupt_asm.h"
 extern "C" uint32_t* intr_handler_table;
 namespace arch_x86{
     /*      Interrupts       */
@@ -11,6 +12,7 @@ namespace arch_x86{
         uint8_t flag;
         uint16_t offset_high;
     };
+    #define USER_INTR_ST            0x20
     #define INTR_CNT                0x30
     #define INTR_FLAG_P             0b10000000
     #define INTR_FLAG_DPL_0         0b00000000

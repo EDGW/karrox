@@ -9,7 +9,7 @@ namespace boot{
     uint32_t screenheight;  //screen height     (in characters)
     uint32_t pos;           //screen position   (in characters)
     color8b_t color;        //8 bit printing color
-    void reser_printer_color(color8b_t clr){
+    void reset_printer_color(){
         color=0xf;
     }
     void set_printer_color(color8b_t clr){
