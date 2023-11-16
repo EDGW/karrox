@@ -1,7 +1,10 @@
 /mountediso
-/run
+./run
+./dev
 .obj
 .gen
 */.obj/*
 */.gen/*
 *.o
+*.iso
+*.img

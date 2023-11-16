@@ -16,17 +16,25 @@ It's advisable to use Visual Studio Code or other advanced editors.
 The descriptions of Project
 
 #### Makefile Targets
+ -  **`make init`**      
+    
+    prepare for the workspace
+
  -  **`make (all)`**      
+
     the default option
     compile and link all sources and generate an image file
 
- -  **`make run`**        
+ -  **`make run`**       
+ 
     run `make all` and start bochs emulator
 
  -  **`(sudo) make mount`**      
+
     mount the iso file(readonly) to the `mountediso` folder under the project path
 
  -  **`(sudo) make umount`**
+
     umount the iso file
 #### Makefile Variables
 - **`$(OBJ_DIR)`**

@@ -126,7 +126,8 @@ namespace arch_x86
         desc.seg_selector=selector;
         return desc;
     }
-    intr_desc_entry table[INTR_CNT];
+    intr_desc_entry table[INTR_CNT];    //interrupt descriptor table
+    /*      create interrupt descriptor table*/
     void create_intr_table(){
         boot::putstr("initializing interrupt table.\n");
         uint32_t* u = &intr_handler_table;
@@ -162,16 +163,15 @@ namespace arch_x86
         }
         boot::reset_printer_color();
     }
+    /*      init interrupt      */
     void init_intr(){
         create_intr_table();
         init_pic();
-        asm volatile("sti");
     }
     void init_memory()
     {
         init_gdt();
         init_paging();
-        init_intr();
     }
     void main()
     {
@@ -185,6 +185,7 @@ const char *arch::getbootinfo()
 void arch::init()
 {
     arch_x86::init_memory();
+    arch_x86::init_intr();
 }
 extern "C" void boot_x86_main(void)
 {

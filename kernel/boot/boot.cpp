@@ -12,12 +12,6 @@ namespace boot{
         printinfo();
         arch::init();
         printf("initialization finished.\n");
-        uint32_t u;
-        asm("movl $0x1919810,%eax");
-        while(1){
-            while(1){
-                u++;
-            }
-        }
+        while(1);
     }
 }
