@@ -1,9 +1,8 @@
-#include<stdint.h>
-#include "debug.h"
-#include "print.h"
-#include "arch/io.h"
+#include <stdint.h>
+#include "lib/debug.h"
+#include "lib/print.h"
+#include "lib/io.h"
 #include "pci.h"
-using namespace io;
 namespace drive::pci{
     #ifdef DEBUG
     void debug(){
@@ -65,9 +64,9 @@ namespace drive::pci{
                 (lfunc << 8) | (offset & 0xFC) | ((uint32_t)0x80000000));
     
         // Write out the address
-        io_outl(PCI_CONFIG_ADDRESS, address);
+        outl(PCI_CONFIG_ADDRESS, address);
         // Read in the data
         // (offset & 2) * 8) = 0 will choose the first word of the 32-bit register
-        return (io_inl(PCI_CONFIG_DATA));
+        return (inl(PCI_CONFIG_DATA));
     }
 }

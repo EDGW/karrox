@@ -1,7 +1,7 @@
 #ifndef _DRIVE_PCI_PCI_H
 #define _DRIVE_PCI_PCI_H
 #include<stdint.h>
-#include "debug.h"
+#include "lib/debug.h"
 namespace drive::pci{
 
 

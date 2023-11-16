@@ -2,7 +2,7 @@
 #include "print.h"
 #include "arch/arch.h"
 #include "arch/io.h"
-#include "debug.h"
+#include "lib/debug.h"
 #include "drive/pci/pci.h"
 namespace boot{
 

@@ -9,12 +9,9 @@ objdir:
 
 all: objdir $(FILES)
 	make -C arch all
-	make -C drive all
 	cp -r arch/$(OBJ_DIR)/* $(OBJ_DIR)/arch
-	cp -r drive/$(OBJ_DIR)/* $(OBJ_DIR)/drive
 clean:
 	make -C arch clean
-	make -C drive clean
 	rm -rf $(OBJ_DIR)
 
 
