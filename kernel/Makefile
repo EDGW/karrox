@@ -5,6 +5,7 @@ all:objdir
 	make $(KERNEL_FILE)
 SUBDIRS = $(shell find $(OBJ_DIR) -maxdepth 10 -type d)
 FILES = $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*.o))
+export INCLUDES += -I $(shell pwd)/lib
 $(KERNEL_FILE):
 	ld -m elf_i386 -T ./__linker.ld -o $(KERNEL_FILE) -nostdlib $(FILES)
 	grub-file --is-x86-multiboot $(KERNEL_FILE)	# verifying

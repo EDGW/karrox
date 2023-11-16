@@ -1,23 +1,13 @@
 .PHONY: all objdir
-export INCLUDES += -I $(shell pwd)
-__FILES	 = boot print
+__FILES	 = pci
 FILES	 = $(patsubst %, ${OBJ_DIR}/%.o, $(__FILES))
+
 objdir:
 	mkdir -p $(OBJ_DIR)
 	rm -rf $(OBJ_DIR)/*
-	mkdir -p $(OBJ_DIR)/arch
-
+	mkdir -p $(OBJ_DIR)
+	
 all: objdir $(FILES)
-	make -C arch all
-	make -C drive all
-	cp -r arch/$(OBJ_DIR)/* $(OBJ_DIR)/arch
-	cp -r drive/$(OBJ_DIR)/* $(OBJ_DIR)/drive
-clean:
-	make -C arch clean
-	make -C drive clean
-	rm -rf $(OBJ_DIR)
-
-
 
 $(OBJ_DIR)/%.o : %.S objdir
 	$(CC) $(INCLUDES) $(CC_ARGS_COMMON) -c -o $@ $<
@@ -25,3 +15,6 @@ $(OBJ_DIR)/%.o : %.c objdir
 	$(CC) $(INCLUDES) $(CC_ARGS_COMMON) -c -o $@ $<
 $(OBJ_DIR)/%.o : %.cpp objdir
 	$(CC) $(INCLUDES) $(CC_ARGS_COMMON) -c -o $@ $<
+
+clean:
+	rm -rf $(OBJ_DIR)

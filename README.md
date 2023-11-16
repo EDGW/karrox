@@ -1,7 +1,7 @@
 ## the Development Environment
 ### Environment
 To make sure the following programs are installed on your computer
- - bochs
+ - qemu
  - grub
  - gcc (12.2.0 or above)
  - make

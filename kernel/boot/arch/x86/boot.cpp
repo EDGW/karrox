@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "interrupt.h"
 #include "io.h"
-    extern "C" void hand_intr_handler3();
+using namespace io;
 namespace arch_x86
 {
     /*      GDT         */

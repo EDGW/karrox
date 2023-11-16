@@ -35,6 +35,7 @@ namespace boot{
     void putint(T value,const char* prefix,int32_t radix){
         if(value<(T)0){
             putchar('-');
+            value=-value;
         }
         putstr(prefix);
         if(value==(T)0){

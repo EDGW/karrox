@@ -16,14 +16,17 @@ all:
 	grub-mkrescue -o ./run/karrox.iso $(ISOROOT)
 
 run:all
-	bochs -q -f ./bochs.bxrc
+	qemu-system-x86_64 -cpu core2duo -m 128 \
+	-drive format=raw,media=cdrom,file=./run/karrox.iso \
+	-drive if=none,file=./dev/nvme.img,id=nvm \
+	-device nvme,serial=deadbeef,drive=nvm	\
+	-drive id=diskahc,file=./dev/sata.img,if=none \
+	-device ahci,id=ahci \
+	-device ide-hd,drive=diskahc,bus=ahci.0
 init:
 	mkdir -p dev
-	dd if=/dev/urandom of=./dev/ata1master.img bs=512 count=30720
-	dd if=/dev/urandom of=./dev/ata1slave.img bs=512 count=30720
-	dd if=/dev/urandom of=./dev/ata2master.img bs=512 count=30720
-	dd if=/dev/urandom of=./dev/ata2slave.img bs=512 count=30720
-	dd if=/dev/urandom of=./dev/usbdisk.img bs=512 count=30720
+	dd if=/dev/urandom of=./dev/nvme.img bs=512 count=30720
+	dd if=/dev/urandom of=./dev/sata.img bs=512 count=30720
 mount:
 	losetup /dev/loop0 run/karrox.iso
 	mkdir -p mountediso

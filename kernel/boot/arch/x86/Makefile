@@ -1,5 +1,5 @@
 # make sure that 'header' is the first object
-__FILES	 = header boot intr_handler
+__FILES	 = header boot intr_handler io
 FILES	 = $(patsubst %, ${OBJ_DIR}/%.o, $(__FILES))
 objdir:
 	mkdir -p $(OBJ_DIR)
