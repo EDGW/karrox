@@ -5,6 +5,7 @@
 #include "memory.h"
 #include "interrupt.h"
 #include "io.h"
+    extern "C" void hand_intr_handler3();
 namespace arch_x86
 {
     /*      GDT         */
@@ -120,7 +121,7 @@ namespace arch_x86
     intr_desc_entry create_intr_entry(uint32_t offset,uint16_t selector,uint8_t flag){
         intr_desc_entry desc;
         desc.offset_low=(uint16_t)(offset&0xffff);
-        desc.offset_high=(uint16_t)((offset&0xffff0000)>16);
+        desc.offset_high=(uint16_t)((offset&0xffff0000)>>16);
         desc.flag=flag;
         desc.seg_selector=selector;
         return desc;
@@ -128,9 +129,11 @@ namespace arch_x86
     intr_desc_entry table[INTR_CNT];
     void create_intr_table(){
         boot::putstr("initializing interrupt table.\n");
+        uint32_t* u = &intr_handler_table;
         for(int i = 0;i<INTR_CNT;i++){
-            uint32_t addr = intr_handler_table[i];
+            uint32_t addr = *u;
             table[i]=create_intr_entry(addr,SELECTOR_KERNEL_CODE,INTR_FLAG_DEFAULT_DPL0);
+            u++;
         }
         uint64_t idtr = ((uint64_t)(uint32_t)table)<<16;
         idtr |= sizeof(table)-1;
@@ -162,6 +165,7 @@ namespace arch_x86
     void init_intr(){
         create_intr_table();
         init_pic();
+        asm volatile("sti");
     }
     void init_memory()
     {

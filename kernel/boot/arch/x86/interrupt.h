@@ -2,7 +2,7 @@
 #define INTERRUPT_H_
 #include<stdint.h>
 #include "interrupt_asm.h"
-extern "C" uint32_t* intr_handler_table;
+extern "C" uint32_t intr_handler_table;
 namespace arch_x86{
     /*      Interrupts       */
     struct intr_desc_entry{

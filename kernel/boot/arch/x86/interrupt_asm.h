@@ -11,4 +11,5 @@
 #define ICW1_SNGL   0b00000010          //single or cascade
 #define ICW1_LTIM_LEVEL 0b00001000      //level trigger
 #define ICW1_LTIM_EDGE  0b00000000      //edge trigger
+#define EOI         0x20
 #endif //INTERRUPT_ASM_H
