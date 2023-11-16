@@ -30,7 +30,7 @@ namespace drive::pci{
         uint16_t device = pci_config_read_word(bus,slot,0,DEVICE_ID_REG);
         uint16_t classids = pci_config_read_word(bus,slot,0,CLASS_CODE_REG);//both class code & subclass id
         uint8_t subclass = (uint8_t)(classids&0xff);//low 8 bit
-        uint8_t classcode = (uint8_t)((classids&0xff00)>>1);//high 8 bit
+        uint8_t classcode = (uint8_t)((classids&0xff00)>>8);//high 8 bit
         uint8_t proginterf = pci_config_read_byte(bus,slot,0,PROG_IF_REG);
         return {bus,slot,vendor,device,classcode,subclass,proginterf};
     }
