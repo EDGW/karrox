@@ -3,13 +3,9 @@
 #include<stdint.h>
 #include "lib/debug.h"
 namespace drive::pci{
-
-
-    
     #ifdef DEBUG
     void debug();
     #endif //DEBUG
-
     /*      Configuration Space         
             0       8|9      15|16      23|24        31
     0x00        Vendor ID      |       Device ID            [READONLY]VENDOR ID is the name of the producer of the device of which DEVICE ID is the name
@@ -42,11 +38,10 @@ namespace drive::pci{
     
     */
     #define PCI_CONFIGURATION_SPACE_LAYOUT
-    #define PCI_HEADER_GENERAL_DEVICE       0x0
-    #define PCI_HEADER_PCI_BRIDGE           0x1
-    #define PCI_HEADER_PCI_CARDBUS_BRIDGE   0x2
 
-    #define VENDOR_ID_RED                   0x00
+
+    /*  register offset  */
+    #define VENDOR_ID_REG                   0x00
     #define DEVICE_ID_REG                   0x02
     #define COMMAND_REG                     0x4
     #define STATUS_REG                      0x6
@@ -74,12 +69,65 @@ namespace drive::pci{
     #define INTR_PIN_REG                    0x3e
     #define INTR_LINE_REG                   0x3f
 
+    /*  header types    */
+    #define PCI_HEADER_GENERAL_DEVICE       0x0
+    #define PCI_HEADER_PCI_BRIDGE           0x1
+    #define PCI_HEADER_PCI_CARDBUS_BRIDGE   0x2
+
+    /*  vendor id about     */
+    #define INVALID_VENDOR_ID               0xffff
+
+    /*  pci ports   */
     #define PCI_CONFIG_ADDRESS              0xCF8
     #define PCI_CONFIG_DATA                 0xCFC
 
 
+    #define MAX_DEVICE_COUNT                65535            //the max count of devices
+    /*a struct describles the information of a pci device*/
+    struct pci_device_info{
+        uint8_t     bus;
+        uint8_t     slot;
+        uint16_t    vendor_id;          //the id of the manufacturer
+        uint16_t    device_id;          //the id of this device
+        uint8_t     class_code;         
+        uint8_t     subclass_code;
+        uint8_t     prog_interface_code;
+    };
+
+    /*init pci drive*/
+    void init();
+    
+    /*get the information about specific device*/
+    pci_device_info get_device_info(uint8_t bus, uint8_t slot);
+
+    /*read a word from pci configuration space
+    bus:    the bus id of the device
+    slot:   the device is in the bus
+    func:   function id
+    offset: the size of config space is 256bytes, and this command is used to read 2 bytes from it
+            the variable determines the offset in the config space
+            the value must be aligned in 4 bytes
+    */
     uint16_t pci_config_read_word(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
+
+    /*read a interger from pci configuration space
+    bus:    the bus id of the device
+    slot:   the device is in the bus
+    func:   function id
+    offset: the size of config space is 256bytes, and this command is used to read 2 bytes from it
+            the variable determines the offset in the config space
+            the value must be aligned in 4 bytes
+    */
     uint32_t pci_config_read_long(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
+
+    /*read a byte from pci configuration space
+    bus:    the bus id of the device
+    slot:   the device is in the bus
+    func:   function id
+    offset: the size of config space is 256bytes, and this command is used to read 2 bytes from it
+            the variable determines the offset in the config space
+            the value must be aligned in 4 bytes
+    */
     uint8_t pci_config_read_byte(uint8_t bus, uint8_t slot, uint8_t func, uint8_t offset);
 }
 

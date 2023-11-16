@@ -26,6 +26,7 @@ namespace boot{
         init_printer();
         printinfo();
         arch::init();
+        drive::pci::init();
         printf("initialization finished.\n");
         #ifdef DEBUG
         debug();
