@@ -1,4 +1,7 @@
 /mountediso
 /run
+.obj
+.gen
 */.obj/*
+*/.gen/*
 *.o

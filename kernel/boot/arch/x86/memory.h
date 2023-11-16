@@ -35,6 +35,9 @@ namespace arch_x86{
     #define FLAG_G_4K               ((0b1LL<<3)<<52)
 
     #define DEFAULT_FLAG            (FLAG_DBL_32 | FLAG_G_4K )
+
+
+    
     /*      Paging      
     0-3GB is user space     (PDE0-PDE767)
     3-4GB is kernel space   (PDE768-PDE1023)
@@ -58,6 +61,8 @@ namespace arch_x86{
     #define PAGE_FLAG_DEFAULT_USER       (PAGE_P | PAGE_RW_RW | PAGE_US_U | PAGE_SIZE_4K)
     /*2MB-16MB space is used by kernel*/
     typedef uint32_t pg_table;
+
+
 }
 
 #endif //_X86_MEMORY_H

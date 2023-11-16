@@ -9,14 +9,34 @@ namespace boot{
     uint32_t screenheight;  //screen height     (in characters)
     uint32_t pos;           //screen position   (in characters)
     color8b_t color;        //8 bit printing color
+    void reser_printer_color(color8b_t clr){
+        color=0xf;
+    }
+    void set_printer_color(color8b_t clr){
+        color &= 0b11111000u;
+        color |=clr;
+    }
+    void set_printer_background(color8b_t clr){
+        color &= 0b10001111u;
+        color |=clr<<4;
+    }
+    void set_printer_highlight(bool on){
+        if(on)color |= 0b00001000u;
+        else color &= 0b11110111u;
+    }
+    void set_printer_flashing(bool on){
+        if(on)color |= 0b10000000u;
+        else color &= 0b01111111u;
+    }
     void init_printer(){
         charpointer = (char*)0xb8000;
         pos = 0;
         screenwidth = 80;
         screenheight = 24;
-        color = 0x7;    //dark white
+        color = 0;
+        set_printer_color(CLR_WHITE);
         printf("------ printer test line ------\n");
-        color = 0xf;    //light white:default color
+        set_printer_highlight(ON);
     }
     void rollscreen(){
         uint32_t s = (screenheight-1)*screenwidth;
@@ -66,6 +86,10 @@ namespace boot{
             putchar(*str);
             str++;                  //move to next
         }
+    }
+    extern "C" void asm_putstr(char* str){
+        const char* ptr = (const char*)str;
+        putstr(ptr);
     }
     char radixnum[] = {'0','1','2','3','4','5','6','7','8','9',
                         'A','B','C','D','E','F','G',

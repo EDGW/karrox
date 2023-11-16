@@ -6,6 +6,18 @@
 namespace boot{
     /*  8 bit printing color            */
     typedef uint8_t color8b_t;
+    #define ON          true
+    #define OFF         false
+    #define CLR_RED     (color8b_t)0b100
+    #define CLR_GREEN   (color8b_t)0b010
+    #define CLR_BLUE    (color8b_t)0b001
+    #define CLR_WHITE   (CLR_RED | CLR_GREEN |CLR_BLUE)
+
+    void set_printer_color(color8b_t clr);      //set the printer's foreground color
+    void set_printer_background(color8b_t clr); //set the printer's background color
+    void set_printer_highlight(bool);           //ON/OFF determines whether the characters is highlighted or not
+    void set_printer_flashing(bool);            //ON/OFF determines whether the characters is flashing or not
+
 
     /*  initialize screen printer       */
     void init_printer();
@@ -13,6 +25,8 @@ namespace boot{
     void putchar(char c);
     /*  print a string on screen        */
     void putstr(const char* str);
+    /*  putstr tailored for asm        */
+    extern "C" void asm_putstr(char* str);
     /*  number characters in radix    */
     extern char radixnum[];
     /*  print an interger with specific prefix and radix    */
@@ -63,8 +77,11 @@ namespace boot{
         %x %X: indicates the character will be replaced by a hexadecimal interger
         %b: the additional replacer indicating the charater will be replaced by a binary interger which is not in any standards
         **DIFFERS FROM C/C++ STANDARD**
-        every printed undecimal interger will be with a prefix such as '0x6336'
+        every printed undecimal interger will be with a prefix such as '0x114514'
         */
     extern "C" void printf(const char* format...);
+
+
+    
 }
 #endif

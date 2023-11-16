@@ -5,6 +5,9 @@ To make sure the following programs are installed on your computer
  - grub
  - gcc (12.2.0 or above)
  - make
+ - python3
+
+Python 3 is used to generate some code.
 
 It's advisable to use Visual Studio Code or other advanced editors.
 
