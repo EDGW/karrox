@@ -16,6 +16,7 @@ doesn't make sense to return from this function as the bootloader is gone.
 _start:
 	/*the CPU is in 32-bit protected mod when using GRUB to boot the system*/
 	mov $stack_top, %esp	//set stack top
+	pushl %ebx				//push multiboot tag addr as main arguments
 	call boot_x86_main		//call main
 	cli
 1:	hlt

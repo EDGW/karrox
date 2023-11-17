@@ -202,7 +202,8 @@ typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 
 struct multiboot_tag
 {
-  multiboot_uint32_t type;
+  multiboot_uint16_t type;
+  multiboot_uint16_t flags;
   multiboot_uint32_t size;
 };
 
@@ -410,6 +411,12 @@ struct multiboot_tag_load_base_addr
   multiboot_uint32_t type;
   multiboot_uint32_t size;
   multiboot_uint32_t load_base_addr;
+};
+
+struct multiboot_info {
+    multiboot_uint32_t total_size;
+    multiboot_uint32_t reserved;
+    struct multiboot_tag tags[0];
 };
 
 #endif /* ! ASM_FILE */
