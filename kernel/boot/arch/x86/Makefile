@@ -1,5 +1,4 @@
-# make sure that 'header' is the first object
-__FILES	 = header boot intr_handler io
+__FILES	 = multiboot header boot intr_handler io intr_c_handler
 FILES	 = $(patsubst %, ${OBJ_DIR}/%.o, $(__FILES))
 objdir:
 	mkdir -p $(OBJ_DIR)

@@ -140,6 +140,8 @@ namespace arch_x86
         idtr |= sizeof(table)-1;
         asm volatile("lidt %0"::"m"(idtr):);
     }
+
+
     /*      init programmable interrupt controller  (8259A)*/
     void init_pic(){
         boot::printf("initializing programmable interrupt controller(8259A)\n");
@@ -167,6 +169,8 @@ namespace arch_x86
     void init_intr(){
         create_intr_table();
         init_pic();
+        init_handlers();
+        asm volatile("sti");
     }
     void init_memory()
     {

@@ -9,10 +9,8 @@
     #define SUBCLS_MASS_STORAGE_SAS     0x07
         #define SUBCLS_MASS_STORAGE_SAS                 0x00
     #define SUBCLS_MASS_STORAGE_NVM     0x08
-        #define SUBCLS_MASS_STORAGE_NVM_VENDOR_SPEC     0x08
-        #define SUBCLS_MASS_STORAGE_NVM_NVMHCI          0x08
-        #define SUBCLS_MASS_STORAGE_NVM_NVMEIO          0x08
-        #define SUBCLS_MASS_STORAGE_NVM_NVMEADMIN       0x08
+        #define SUBCLS_MASS_STORAGE_NVM_NVMHCI          0x01
+        #define SUBCLS_MASS_STORAGE_NVM_NVME            0x02
     #define SUBCLS_MASS_STORAGE_UFS     0x09
     #define SUBCLS_MASS_STORAGE_OTHER   0x80
 

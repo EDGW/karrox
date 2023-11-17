@@ -23,5 +23,15 @@ namespace arch_x86{
     #define INTR_FLAG_TYPE_TRAP16   0x7
     #define INTR_FLAG_TYPE_TRAP32   0xf
     #define INTR_FLAG_DEFAULT_DPL0  (INTR_FLAG_P | INTR_FLAG_DPL_0 | INTR_FLAG_TYPE_INTR32)
+    
+    /*
+    send EOI to PIC and the interrupt ends
+    */
+    void call_end_of_intr();
+
+    /*
+    initialize default interrupt handlers
+    */
+    void init_handlers();
 }
 #endif

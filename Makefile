@@ -18,9 +18,9 @@ all:
 run:all
 	qemu-system-x86_64 -cpu core2duo -m 128 \
 	-drive format=raw,media=cdrom,file=./run/karrox.iso \
-	-drive if=none,file=./dev/nvme.img,id=nvm \
+	-drive format=raw,if=none,file=./dev/nvme.img,id=nvm \
 	-device nvme,serial=deadbeef,drive=nvm	\
-	-drive id=diskahc,file=./dev/sata.img,if=none \
+	-drive format=raw,id=diskahc,file=./dev/sata.img,if=none \
 	-device ahci,id=ahci \
 	-device ide-hd,drive=diskahc,bus=ahci.0
 init:

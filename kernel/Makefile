@@ -10,7 +10,7 @@ FILES = $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*.o))
 export INCLUDES += -I $(shell pwd)
 $(KERNEL_FILE):
 	ld -m elf_i386 -T ./__linker.ld -o $(KERNEL_FILE) -nostdlib $(FILES)
-	grub-file --is-x86-multiboot $(KERNEL_FILE)	# verifying
+	grub-file --is-x86-multiboot2 $(KERNEL_FILE)	# verifying
 objdir:
 	mkdir -p $(OBJ_DIR)
 	rm -rf $(OBJ_DIR)/*

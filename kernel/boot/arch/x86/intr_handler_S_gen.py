@@ -98,17 +98,27 @@ for i in range(irq_count):
     definetarget("hand_intr_handler"+str(i))
     tab+=1
     if not errcode[i]:  # without errorcode
-        code("push $0")
-    code("push $intr_desc"+str(i))
-    code("call asm_putstr")
-    code("add $4,%esp") # argument of 'asm_putstr'
-
-    code("movb $EOI,%al")
-    code("outb %al,$X8259A_MASTER_1_PORT")
-    code("outb %al,$X8259A_SLAVE_1_PORT")
-    code("add $4,%esp") #error code
+        code("push $0")         # push error code
+    # save context
+    code("push %ds")    
+    code("push %es")
+    code("push %fs")
+    code("push %gs")
+    code("pusha")   # pusha : EAX ECX EDX EBX ESP EBP ESI EDI 
+    # call handler
+    code(f"pushl ${str(i)}")    # push vec number
+    code("call intr_c_handler") # handler
+    # end of intr was called by c_handler
+    # if unhandled, the system hlt.
+    # intr exit
+    code("add $4,%esp") # skip vec number
+    # resume context
+    code("popa")    # popa : EDI ESI EBP ESP EBX EDX ECX EAX    
+    code("pop %gs")
+    code("pop %fs")
+    code("pop %es")
+    code("pop %ds")
+    code("add $4,%esp") # skip error code
     code("iret")  #return from interrupt
-    section(".data")
-    putnamedaddr("intr_desc"+str(i),"ascii","\""+desc[i]+"\\n\\0\"")
     tab-=1
 tab-=1
