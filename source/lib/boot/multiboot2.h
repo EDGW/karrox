@@ -99,9 +99,9 @@ struct multiboot_header
   /* Must be MULTIBOOT_MAGIC - see above.  */
   multiboot_uint32_t magic;
 
-  /* ISA */
-  multiboot_uint32_t architecture;
-
+  /* ISA */   
+  multiboot_uint32_t architecture; 
+ 
   /* Total header length.  */
   multiboot_uint32_t header_length;
 
@@ -110,7 +110,7 @@ struct multiboot_header
 };
 
 struct multiboot_header_tag
-{
+{ 
   multiboot_uint16_t type;
   multiboot_uint16_t flags;
   multiboot_uint32_t size;
@@ -202,8 +202,7 @@ typedef struct multiboot_mmap_entry multiboot_memory_map_t;
 
 struct multiboot_tag
 {
-  multiboot_uint16_t type;
-  multiboot_uint16_t flags;
+  multiboot_uint32_t type;
   multiboot_uint32_t size;
 };
 
@@ -411,12 +410,6 @@ struct multiboot_tag_load_base_addr
   multiboot_uint32_t type;
   multiboot_uint32_t size;
   multiboot_uint32_t load_base_addr;
-};
-
-struct multiboot_info {
-    multiboot_uint32_t total_size;
-    multiboot_uint32_t reserved;
-    struct multiboot_tag tags[0];
 };
 
 #endif /* ! ASM_FILE */

@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.inc": "makefile",
+            "multiboot2.h": "c"
+        }
+    }
+}
