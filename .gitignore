@@ -1,3 +1,6 @@
 .obj
 .gen
 .bin
+.iso
+.dev
+.tst

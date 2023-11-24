@@ -7,7 +7,27 @@
     "settings": {
         "files.associations": {
             "*.inc": "makefile",
-            "multiboot2.h": "c"
+            "multiboot2.h": "c",
+            "memory.h": "c",
+            "paging.h": "c",
+            "bootinfo.h": "c",
+            "interrupt.h": "c",
+            "stdint.h": "c",
+            "stdbool.h": "c",
+            "bitmap.h": "c",
+            "string.h": "c"
+        },
+        "makefile.makefilePath": "Makefile",
+        "makefile.launchConfigurations": [
+            {
+                "binaryPath": "make",
+                "binaryArgs": ["run"]
+            }
+        ],
+        "files.exclude": {
+            "**/.gen": true,
+            "**/.iso": true,
+            "**/.obj": true
         }
     }
 }

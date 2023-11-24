@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.inc": "makefile",
+        "paging.h": "c",
+        "memory.h": "c"
+    }
+}
