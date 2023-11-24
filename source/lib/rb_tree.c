@@ -16,7 +16,7 @@ static struct rb_tree_node *nil_node = &nil_node_struct;
 /**
  * @brief initialize a tree
 */
-void init(struct rb_tree* tree){
+void init_rb_tree(struct rb_tree* tree){
     tree->root_node=nil_node;
 }
 

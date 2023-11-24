@@ -36,7 +36,7 @@ struct rb_tree{
 /**
  * @brief initialize a tree
 */
-void init(struct rb_tree* tree);
+void init_rb_tree(struct rb_tree* tree);
 
 /**
  * @brief to check if whether a node is null

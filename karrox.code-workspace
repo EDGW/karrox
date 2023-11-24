@@ -15,7 +15,9 @@
             "stdint.h": "c",
             "stdbool.h": "c",
             "bitmap.h": "c",
-            "string.h": "c"
+            "string.h": "c",
+            "physical_alloc.h": "c",
+            "rb_tree.h": "c"
         },
         "makefile.makefilePath": "Makefile",
         "makefile.launchConfigurations": [

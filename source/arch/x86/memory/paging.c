@@ -17,7 +17,12 @@
 /**
  * @brief the size of physical memory pages.
 */
+
 uint32_t physical_page_count = 0x0;
+
+size_t get_physical_page_count(){//extern "lib/boot/memory.h"
+    return physical_page_count;
+}
 
 /**
  * @brief clear 4KiB memory from the specific addr
@@ -82,9 +87,9 @@ void reload_page(void* page_table){
 */
 void create_page_table(){
     clear_mem_4k((void*)PHYSICAL_KERNEL_PT_POS);
-    //create lower_32MiB table
+    //create lower_64MiB table
     void *ptaddr = (void*)(PHYSICAL_KERNEL_PT_POS+0x1000);//skip page directory table
-    for(int i = 0;i<8;i++){
+    for(int i = 0;i<16;i++){
         create_page_directory_entry(i,ptaddr+(i*0x1000),PG_FLAG_P | PG_FLAG_RW_RW | PG_FLAG_US_S);
         create_page_directory_entry(i+768,ptaddr+(i*0x1000),PG_FLAG_P | PG_FLAG_RW_RW | PG_FLAG_US_S);
         create_secondary_page_table(i,(void*)(i*0x400000),PG_FLAG_GLOBAL | PG_FLAG_P |PG_FLAG_RW_RW | PG_FLAG_US_S);
@@ -96,7 +101,7 @@ void create_page_table(){
  * @brief init paging
  * @details Physically, lower [0,2) MiB is used by BIOS, 
  *          the operating system should avoid to use the lower 2-MB memory or arrange it to other processes,
- *          [2,32) MiB memory is used by the opreating system kernel,
+ *          [2,64) MiB memory is used by the opreating system kernel,
  *          specially ,[4,12) MiB memory is kernel Page Table,
  *          other momory pages are user-available
  *          Virtually, kernel used higher [3,4) GiB memory and other memory are user-available.
